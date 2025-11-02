@@ -1,0 +1,546 @@
+{
+  "info": {
+    "name": "Animeto API",
+    "description": "Colección de endpoints para la API de red social de manga y anime",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "animeto-api-collection"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Juan Pérez",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "juan@example.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "MiPassword123",
+                  "type": "text"
+                },
+                {
+                  "key": "profilePhoto",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.data.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Iniciar Sesión",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"MiPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.data.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Obtener Mi Perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Perfil",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Juan Pérez Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Subir Foto de Perfil",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/users/profile/photo",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile", "photo"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Foto de Perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/profile/photo",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile", "photo"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Crear Post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "description",
+                  "value": "Mi manga favorito de la temporada",
+                  "type": "text"
+                },
+                {
+                  "key": "currentChapters",
+                  "value": "25",
+                  "type": "text"
+                },
+                {
+                  "key": "type",
+                  "value": "manga",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "[\"acción\", \"aventura\", \"shonen\"]",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/posts",
+              "host": ["{{base_url}}"],
+              "path": ["posts"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts?page=1&limit=10&type=manga",
+              "host": ["{{base_url}}"],
+              "path": ["posts"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "type",
+                  "value": "manga"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Post por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/{{post_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "{{post_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Mis Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/my-posts",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "my-posts"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Post",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Descripción actualizada del post\",\n  \"currentChapters\": 30\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/posts/{{post_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "{{post_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/{{post_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "{{post_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comentarios",
+      "item": [
+        {
+          "name": "Crear Comentario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Me encanta este manga, muy buena historia\",\n  \"postId\": \"{{post_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/comments",
+              "host": ["{{base_url}}"],
+              "path": ["comments"]
+            }
+          }
+        },
+        {
+          "name": "Responder Comentario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Estoy de acuerdo contigo\",\n  \"postId\": \"{{post_id}}\",\n  \"parentId\": \"{{comment_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/comments",
+              "host": ["{{base_url}}"],
+              "path": ["comments"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Comentarios de Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comments/post/{{post_id}}?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["comments", "post", "{{post_id}}"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Respuestas de Comentario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comments/{{comment_id}}/replies",
+              "host": ["{{base_url}}"],
+              "path": ["comments", "{{comment_id}}", "replies"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Comentario",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Comentario actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/comments/{{comment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["comments", "{{comment_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Comentario",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/comments/{{comment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["comments", "{{comment_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reacciones",
+      "item": [
+        {
+          "name": "Like a Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"like\",\n  \"target\": \"post\",\n  \"postId\": \"{{post_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reactions",
+              "host": ["{{base_url}}"],
+              "path": ["reactions"]
+            }
+          }
+        },
+        {
+          "name": "Dislike a Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"dislike\",\n  \"target\": \"post\",\n  \"postId\": \"{{post_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reactions",
+              "host": ["{{base_url}}"],
+              "path": ["reactions"]
+            }
+          }
+        },
+        {
+          "name": "Like a Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"like\",\n  \"target\": \"comment\",\n  \"commentId\": \"{{comment_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reactions",
+              "host": ["{{base_url}}"],
+              "path": ["reactions"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Reacciones de Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reactions/post/{{post_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["reactions", "post", "{{post_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Reacciones de Post con Usuario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reactions/user/post/{{post_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["reactions", "user", "post", "{{post_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Reacciones de Comentario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reactions/comment/{{comment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["reactions", "comment", "{{comment_id}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

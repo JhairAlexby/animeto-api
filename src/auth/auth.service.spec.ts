@@ -81,7 +81,9 @@ describe('AuthService', () => {
 
       const result = await service.register(registerDto);
 
-      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(registerDto.email);
+      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
+        registerDto.email,
+      );
       expect(bcrypt.hash).toHaveBeenCalledWith(registerDto.password, 12);
       expect(mockUsersService.create).toHaveBeenCalledWith({
         name: registerDto.name,
@@ -106,8 +108,12 @@ describe('AuthService', () => {
       const existingUser = { id: '1', email: 'test@example.com' };
       mockUsersService.findByEmail.mockResolvedValue(existingUser);
 
-      await expect(service.register(registerDto)).rejects.toThrow(ConflictException);
-      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(registerDto.email);
+      await expect(service.register(registerDto)).rejects.toThrow(
+        ConflictException,
+      );
+      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
+        registerDto.email,
+      );
     });
   });
 
@@ -194,7 +200,10 @@ describe('AuthService', () => {
 
       const result = await service.login(loginDto);
 
-      expect(service.validateUser).toHaveBeenCalledWith(loginDto.email, loginDto.password);
+      expect(service.validateUser).toHaveBeenCalledWith(
+        loginDto.email,
+        loginDto.password,
+      );
       expect(result).toEqual({
         user: {
           id: mockUser.id,
@@ -210,7 +219,9 @@ describe('AuthService', () => {
     it('should throw UnauthorizedException if credentials are invalid', async () => {
       jest.spyOn(service, 'validateUser').mockResolvedValue(null);
 
-      await expect(service.login(loginDto)).rejects.toThrow(UnauthorizedException);
+      await expect(service.login(loginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

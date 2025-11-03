@@ -36,7 +36,8 @@ export class CommentsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Crear comentario',
-    description: 'Crea un nuevo comentario en un post o respuesta a otro comentario',
+    description:
+      'Crea un nuevo comentario en un post o respuesta a otro comentario',
   })
   @ApiResponse({
     status: 201,
@@ -49,8 +50,14 @@ export class CommentsController {
         data: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
-            content: { type: 'string', example: 'Me encanta este manga, muy buena historia' },
+            id: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
+            content: {
+              type: 'string',
+              example: 'Me encanta este manga, muy buena historia',
+            },
             likesCount: { type: 'number', example: 0 },
             dislikesCount: { type: 'number', example: 0 },
             repliesCount: { type: 'number', example: 0 },
@@ -96,8 +103,8 @@ export class CommentsController {
           type: 'array',
           items: {
             type: 'string',
-            example: 'El contenido del comentario es obligatorio'
-          }
+            example: 'El contenido del comentario es obligatorio',
+          },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
@@ -138,7 +145,8 @@ export class CommentsController {
   @Public()
   @ApiOperation({
     summary: 'Obtener comentarios de un post',
-    description: 'Obtiene los comentarios principales de un post con paginación',
+    description:
+      'Obtiene los comentarios principales de un post con paginación',
   })
   @ApiParam({
     name: 'postId',
@@ -164,11 +172,17 @@ export class CommentsController {
                 type: 'object',
                 properties: {
                   id: { type: 'string', example: 'comment-uuid' },
-                  content: { type: 'string', example: 'Me encanta este manga, muy buena historia' },
+                  content: {
+                    type: 'string',
+                    example: 'Me encanta este manga, muy buena historia',
+                  },
                   likesCount: { type: 'number', example: 5 },
                   dislikesCount: { type: 'number', example: 1 },
                   repliesCount: { type: 'number', example: 3 },
-                  createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+                  createdAt: {
+                    type: 'string',
+                    example: '2024-01-01T00:00:00.000Z',
+                  },
                   author: {
                     type: 'object',
                     properties: {
@@ -218,7 +232,8 @@ export class CommentsController {
   @Public()
   @ApiOperation({
     summary: 'Obtener respuestas de un comentario',
-    description: 'Obtiene las respuestas de un comentario específico con paginación',
+    description:
+      'Obtiene las respuestas de un comentario específico con paginación',
   })
   @ApiParam({
     name: 'id',
@@ -244,11 +259,17 @@ export class CommentsController {
                 type: 'object',
                 properties: {
                   id: { type: 'string', example: 'reply-uuid' },
-                  content: { type: 'string', example: 'Estoy de acuerdo, es excelente' },
+                  content: {
+                    type: 'string',
+                    example: 'Estoy de acuerdo, es excelente',
+                  },
                   likesCount: { type: 'number', example: 2 },
                   dislikesCount: { type: 'number', example: 0 },
                   repliesCount: { type: 'number', example: 0 },
-                  createdAt: { type: 'string', example: '2024-01-01T01:00:00.000Z' },
+                  createdAt: {
+                    type: 'string',
+                    example: '2024-01-01T01:00:00.000Z',
+                  },
                   author: {
                     type: 'object',
                     properties: {
@@ -319,7 +340,8 @@ export class CommentsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Actualizar comentario',
-    description: 'Actualiza un comentario existente (solo el autor puede hacerlo)',
+    description:
+      'Actualiza un comentario existente (solo el autor puede hacerlo)',
   })
   @ApiParam({
     name: 'id',
@@ -344,7 +366,8 @@ export class CommentsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Eliminar comentario',
-    description: 'Elimina un comentario existente (solo el autor puede hacerlo)',
+    description:
+      'Elimina un comentario existente (solo el autor puede hacerlo)',
   })
   @ApiParam({
     name: 'id',

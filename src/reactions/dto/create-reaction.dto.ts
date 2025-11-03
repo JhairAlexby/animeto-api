@@ -9,7 +9,9 @@ export class CreateReactionDto {
     example: ReactionType.LIKE,
   })
   @IsNotEmpty({ message: 'El tipo de reacción es obligatorio' })
-  @IsEnum(ReactionType, { message: 'El tipo de reacción debe ser like o dislike' })
+  @IsEnum(ReactionType, {
+    message: 'El tipo de reacción debe ser like o dislike',
+  })
   type: ReactionType;
 
   @ApiProperty({

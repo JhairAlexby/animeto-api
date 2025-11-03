@@ -30,7 +30,10 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { FilterPostsDto } from './dto/filter-posts.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { GetCurrentUser, ValidateImageFile } from '../common/decorators/file-validation.decorator';
+import {
+  GetCurrentUser,
+  ValidateImageFile,
+} from '../common/decorators/file-validation.decorator';
 import { User } from '../users/entities/user.entity';
 import { Public } from '../auth/decorators/public.decorator';
 
@@ -95,11 +98,21 @@ export class PostsController {
         data: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
-            description: { type: 'string', example: 'Mi manga favorito de la temporada' },
+            id: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
+            description: {
+              type: 'string',
+              example: 'Mi manga favorito de la temporada',
+            },
             currentChapters: { type: 'number', example: 25 },
             type: { type: 'string', example: 'manga' },
-            tags: { type: 'array', items: { type: 'string' }, example: ['acción', 'aventura', 'shonen'] },
+            tags: {
+              type: 'array',
+              items: { type: 'string' },
+              example: ['acción', 'aventura', 'shonen'],
+            },
             likesCount: { type: 'number', example: 0 },
             dislikesCount: { type: 'number', example: 0 },
             commentsCount: { type: 'number', example: 0 },
@@ -131,8 +144,8 @@ export class PostsController {
           type: 'array',
           items: {
             type: 'string',
-            example: 'La descripción es obligatoria'
-          }
+            example: 'La descripción es obligatoria',
+          },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
@@ -180,16 +193,29 @@ export class PostsController {
               items: {
                 type: 'object',
                 properties: {
-                  id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
-                  description: { type: 'string', example: 'Mi manga favorito de la temporada' },
+                  id: {
+                    type: 'string',
+                    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+                  },
+                  description: {
+                    type: 'string',
+                    example: 'Mi manga favorito de la temporada',
+                  },
                   currentChapters: { type: 'number', example: 25 },
                   type: { type: 'string', example: 'manga' },
-                  tags: { type: 'array', items: { type: 'string' }, example: ['acción', 'aventura', 'shonen'] },
+                  tags: {
+                    type: 'array',
+                    items: { type: 'string' },
+                    example: ['acción', 'aventura', 'shonen'],
+                  },
                   likesCount: { type: 'number', example: 15 },
                   dislikesCount: { type: 'number', example: 2 },
                   commentsCount: { type: 'number', example: 8 },
                   hasImage: { type: 'boolean', example: true },
-                  createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+                  createdAt: {
+                    type: 'string',
+                    example: '2024-01-01T00:00:00.000Z',
+                  },
                   author: {
                     type: 'object',
                     properties: {
@@ -274,17 +300,14 @@ export class PostsController {
     status: 200,
     description: 'Imagen obtenida exitosamente',
   })
-  async getImage(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Res() res: Response,
-  ) {
+  async getImage(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
     const { image, mimeType } = await this.postsService.getImage(id);
-    
+
     res.set({
       'Content-Type': mimeType,
       'Content-Length': image.length.toString(),
     });
-    
+
     res.send(image);
   }
 

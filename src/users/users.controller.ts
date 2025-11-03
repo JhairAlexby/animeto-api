@@ -26,7 +26,10 @@ import {
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { GetCurrentUser, ValidateImageFile } from '../common/decorators/file-validation.decorator';
+import {
+  GetCurrentUser,
+  ValidateImageFile,
+} from '../common/decorators/file-validation.decorator';
 import { User } from './entities/user.entity';
 
 @ApiTags('Usuarios')
@@ -52,7 +55,10 @@ export class UsersController {
         data: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            id: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
             name: { type: 'string', example: 'Juan Pérez' },
             email: { type: 'string', example: 'juan@example.com' },
             createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
@@ -95,7 +101,10 @@ export class UsersController {
         data: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            id: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
             name: { type: 'string', example: 'Juan Carlos Pérez' },
             email: { type: 'string', example: 'juan@example.com' },
             createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
@@ -118,8 +127,8 @@ export class UsersController {
           type: 'array',
           items: {
             type: 'string',
-            example: 'El nombre debe tener al menos 2 caracteres'
-          }
+            example: 'El nombre debe tener al menos 2 caracteres',
+          },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
@@ -173,7 +182,10 @@ export class UsersController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Foto de perfil actualizada exitosamente' },
+        message: {
+          type: 'string',
+          example: 'Foto de perfil actualizada exitosamente',
+        },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
     },
@@ -185,7 +197,10 @@ export class UsersController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: false },
-        message: { type: 'string', example: 'El archivo debe ser una imagen válida (JPG, PNG, GIF)' },
+        message: {
+          type: 'string',
+          example: 'El archivo debe ser una imagen válida (JPG, PNG, GIF)',
+        },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
     },
@@ -223,17 +238,16 @@ export class UsersController {
     status: 200,
     description: 'Foto de perfil obtenida exitosamente',
   })
-  async getProfilePhoto(
-    @GetCurrentUser() user: User,
-    @Res() res: Response,
-  ) {
-    const { photo, mimeType } = await this.usersService.getProfilePhoto(user.id);
-    
+  async getProfilePhoto(@GetCurrentUser() user: User, @Res() res: Response) {
+    const { photo, mimeType } = await this.usersService.getProfilePhoto(
+      user.id,
+    );
+
     res.set({
       'Content-Type': mimeType,
       'Content-Length': photo.length.toString(),
     });
-    
+
     res.send(photo);
   }
 
@@ -257,12 +271,12 @@ export class UsersController {
     @Res() res: Response,
   ) {
     const { photo, mimeType } = await this.usersService.getProfilePhoto(id);
-    
+
     res.set({
       'Content-Type': mimeType,
       'Content-Length': photo.length.toString(),
     });
-    
+
     res.send(photo);
   }
 
@@ -283,7 +297,8 @@ export class UsersController {
   @Get(':id')
   @ApiOperation({
     summary: 'Obtener perfil de usuario por ID',
-    description: 'Obtiene la información pública del perfil de un usuario específico',
+    description:
+      'Obtiene la información pública del perfil de un usuario específico',
   })
   @ApiParam({
     name: 'id',

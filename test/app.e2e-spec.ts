@@ -14,7 +14,7 @@ describe('Animeto API (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    
+
     // Configurar validaciones como en main.ts
     app.useGlobalPipes(
       new ValidationPipe({
@@ -119,9 +119,7 @@ describe('Animeto API (e2e)', () => {
     });
 
     it('/users/profile (GET) - should fail without authentication', () => {
-      return request(app.getHttpServer())
-        .get('/users/profile')
-        .expect(401);
+      return request(app.getHttpServer()).get('/users/profile').expect(401);
     });
   });
 
@@ -202,7 +200,7 @@ describe('Animeto API (e2e)', () => {
         .set('Authorization', `Bearer ${jwtToken}`)
         .field('description', 'Post for comments test')
         .field('type', 'manga');
-      
+
       postId = postResponse.body.data.id;
     });
 
@@ -261,7 +259,7 @@ describe('Animeto API (e2e)', () => {
         .set('Authorization', `Bearer ${jwtToken}`)
         .field('description', 'Post for reactions test')
         .field('type', 'manga');
-      
+
       postId = postResponse.body.data.id;
     });
 

@@ -16,8 +16,18 @@ export class PublicacionesController {
     description:
       'Retorna un listado paginado de publicaciones con datos básicos, autor, reacciones (tipo y usuario) y comentarios (contenido, fecha y usuario).',
   })
-  @ApiQuery({ name: 'page', required: false, description: 'Número de página (default 1)', type: Number })
-  @ApiQuery({ name: 'limit', required: false, description: 'Resultados por página (default 10)', type: Number })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Número de página (default 1)',
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Resultados por página (default 10)',
+    type: Number,
+  })
   @ApiResponse({
     status: 200,
     description: 'Listado de publicaciones completas',
@@ -35,10 +45,19 @@ export class PublicacionesController {
               imageUrl: '/posts/uuid-post/image',
               author: { id: 'uuid-user', name: 'Autor' },
               reactions: [
-                { type: 'LIKE', createdAt: '2024-01-01T12:01:00.000Z', user: { id: 'uuid-user', name: 'Usuario' } },
+                {
+                  type: 'LIKE',
+                  createdAt: '2024-01-01T12:01:00.000Z',
+                  user: { id: 'uuid-user', name: 'Usuario' },
+                },
               ],
               comments: [
-                { id: 'uuid-comment', content: 'Buen post', createdAt: '2024-01-01T12:02:00.000Z', user: { id: 'uuid-user', name: 'Usuario' } },
+                {
+                  id: 'uuid-comment',
+                  content: 'Buen post',
+                  createdAt: '2024-01-01T12:02:00.000Z',
+                  user: { id: 'uuid-user', name: 'Usuario' },
+                },
               ],
             },
           ],

@@ -9,6 +9,8 @@ export class UpdateCommentDto {
   })
   @IsNotEmpty({ message: 'El contenido del comentario es obligatorio' })
   @IsString({ message: 'El contenido debe ser una cadena de texto' })
-  @MaxLength(1000, { message: 'El comentario no puede exceder 1000 caracteres' })
+  @MaxLength(1000, {
+    message: 'El comentario no puede exceder 1000 caracteres',
+  })
   content: string;
 }

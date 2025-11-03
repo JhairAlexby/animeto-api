@@ -21,7 +21,9 @@ export class CreatePostDto {
   })
   @IsNotEmpty({ message: 'La descripción es obligatoria' })
   @IsString({ message: 'La descripción debe ser una cadena de texto' })
-  @MaxLength(2000, { message: 'La descripción no puede exceder 2000 caracteres' })
+  @MaxLength(2000, {
+    message: 'La descripción no puede exceder 2000 caracteres',
+  })
   description: string;
 
   @ApiPropertyOptional({
@@ -41,7 +43,9 @@ export class CreatePostDto {
     example: ContentType.MANGA,
   })
   @IsNotEmpty({ message: 'El tipo de contenido es obligatorio' })
-  @IsEnum(ContentType, { message: 'El tipo de contenido debe ser anime, manga o manhwa' })
+  @IsEnum(ContentType, {
+    message: 'El tipo de contenido debe ser anime, manga o manhwa',
+  })
   type: ContentType;
 
   @ApiPropertyOptional({
@@ -52,7 +56,10 @@ export class CreatePostDto {
   })
   @IsOptional()
   @IsArray({ message: 'Las etiquetas deben ser un array' })
-  @IsString({ each: true, message: 'Cada etiqueta debe ser una cadena de texto' })
+  @IsString({
+    each: true,
+    message: 'Cada etiqueta debe ser una cadena de texto',
+  })
   @ArrayMaxSize(10, { message: 'No se pueden agregar más de 10 etiquetas' })
   tags?: string[] = [];
 }

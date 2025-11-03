@@ -21,7 +21,10 @@ export class FilterPostsDto extends PaginationDto {
   })
   @IsOptional()
   @IsArray({ message: 'Las etiquetas deben ser un array' })
-  @IsString({ each: true, message: 'Cada etiqueta debe ser una cadena de texto' })
+  @IsString({
+    each: true,
+    message: 'Cada etiqueta debe ser una cadena de texto',
+  })
   tags?: string[];
 
   @ApiPropertyOptional({

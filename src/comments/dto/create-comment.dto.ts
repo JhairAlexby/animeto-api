@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsOptional, IsUUID, MaxLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCommentDto {
@@ -9,7 +15,9 @@ export class CreateCommentDto {
   })
   @IsNotEmpty({ message: 'El contenido del comentario es obligatorio' })
   @IsString({ message: 'El contenido debe ser una cadena de texto' })
-  @MaxLength(1000, { message: 'El comentario no puede exceder 1000 caracteres' })
+  @MaxLength(1000, {
+    message: 'El comentario no puede exceder 1000 caracteres',
+  })
   content: string;
 
   @ApiProperty({
@@ -25,6 +33,8 @@ export class CreateCommentDto {
     example: 'uuid-del-comentario-padre',
   })
   @IsOptional()
-  @IsUUID('4', { message: 'El ID del comentario padre debe ser un UUID válido' })
+  @IsUUID('4', {
+    message: 'El ID del comentario padre debe ser un UUID válido',
+  })
   parentId?: string;
 }

@@ -49,7 +49,10 @@ export class Reaction {
   @Column({ type: 'uuid' })
   userId: string;
 
-  @ManyToOne(() => Post, (post) => post.reactions, { nullable: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => Post, (post) => post.reactions, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'postId' })
   post: Post;
 

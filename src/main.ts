@@ -11,7 +11,9 @@ async function bootstrap() {
 
   // Configuración de CORS
   app.enableCors({
-    origin: configService.get('CORS_ORIGIN')?.split(',') || ['http://localhost:3000'],
+    origin: configService.get('CORS_ORIGIN')?.split(',') || [
+      'http://localhost:3000',
+    ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -61,11 +63,13 @@ async function bootstrap() {
 
   // Configuración del puerto
   const port = configService.get('PORT') || 3000;
-  
+
   await app.listen(port);
-  
+
   logger.log(`🚀 Aplicación ejecutándose en: http://localhost:${port}`);
-  logger.log(`📚 Documentación Swagger disponible en: http://localhost:${port}/api/docs`);
+  logger.log(
+    `📚 Documentación Swagger disponible en: http://localhost:${port}/api/docs`,
+  );
 }
 
 bootstrap();

@@ -63,7 +63,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.validateUser(loginDto.email, loginDto.password);
-    
+
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
@@ -86,13 +86,13 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User | null> {
     try {
       const user = await this.usersService.findByEmail(email);
-      
+
       if (!user || !user.isActive) {
         return null;
       }
 
       const isPasswordValid = await bcrypt.compare(password, user.password);
-      
+
       if (!isPasswordValid) {
         return null;
       }
@@ -107,7 +107,7 @@ export class AuthService {
     try {
       const payload = this.jwtService.verify(token);
       const user = await this.usersService.findById(payload.sub);
-      
+
       if (!user || !user.isActive) {
         throw new UnauthorizedException('Token inválido');
       }

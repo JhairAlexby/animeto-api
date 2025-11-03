@@ -16,9 +16,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
 
     const exceptionResponse = exception.getResponse();
-    const message = typeof exceptionResponse === 'string' 
-      ? exceptionResponse 
-      : (exceptionResponse as any).message || 'Error interno del servidor';
+    const message =
+      typeof exceptionResponse === 'string'
+        ? exceptionResponse
+        : (exceptionResponse as any).message || 'Error interno del servidor';
 
     response.status(status).json({
       success: false,
@@ -40,13 +41,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status = exception instanceof HttpException
-      ? exception.getStatus()
-      : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message = exception instanceof HttpException
-      ? exception.getResponse()
-      : 'Error interno del servidor';
+    const message =
+      exception instanceof HttpException
+        ? exception.getResponse()
+        : 'Error interno del servidor';
 
     response.status(status).json({
       success: false,

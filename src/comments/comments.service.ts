@@ -20,7 +20,10 @@ export class CommentsService {
     private postsService: PostsService,
   ) {}
 
-  async create(createCommentDto: CreateCommentDto, authorId: string): Promise<Comment> {
+  async create(
+    createCommentDto: CreateCommentDto,
+    authorId: string,
+  ): Promise<Comment> {
     const { postId, parentId, content } = createCommentDto;
 
     // Verificar que el post existe
@@ -37,7 +40,9 @@ export class CommentsService {
       }
 
       if (parentComment.postId !== postId) {
-        throw new BadRequestException('El comentario padre no pertenece al mismo post');
+        throw new BadRequestException(
+          'El comentario padre no pertenece al mismo post',
+        );
       }
     }
 
@@ -55,13 +60,20 @@ export class CommentsService {
 
     // Si es una respuesta, incrementar contador de respuestas en el comentario padre
     if (parentId) {
-      await this.commentRepository.increment({ id: parentId }, 'repliesCount', 1);
+      await this.commentRepository.increment(
+        { id: parentId },
+        'repliesCount',
+        1,
+      );
     }
 
     return this.findOne(savedComment.id);
   }
 
-  async findByPost(postId: string, paginationDto: PaginationDto): Promise<PaginatedResponse<Comment>> {
+  async findByPost(
+    postId: string,
+    paginationDto: PaginationDto,
+  ): Promise<PaginatedResponse<Comment>> {
     const { page = 1, limit = 10 } = paginationDto;
 
     // Verificar que el post existe
@@ -101,7 +113,10 @@ export class CommentsService {
     };
   }
 
-  async findReplies(commentId: string, paginationDto: PaginationDto): Promise<PaginatedResponse<Comment>> {
+  async findReplies(
+    commentId: string,
+    paginationDto: PaginationDto,
+  ): Promise<PaginatedResponse<Comment>> {
     const { page = 1, limit = 10 } = paginationDto;
 
     // Verificar que el comentario padre existe
@@ -175,7 +190,11 @@ export class CommentsService {
     return comment;
   }
 
-  async update(id: string, updateCommentDto: UpdateCommentDto, userId: string): Promise<Comment> {
+  async update(
+    id: string,
+    updateCommentDto: UpdateCommentDto,
+    userId: string,
+  ): Promise<Comment> {
     const comment = await this.commentRepository.findOne({
       where: { id },
     });
@@ -185,7 +204,9 @@ export class CommentsService {
     }
 
     if (comment.authorId !== userId) {
-      throw new ForbiddenException('No tienes permisos para editar este comentario');
+      throw new ForbiddenException(
+        'No tienes permisos para editar este comentario',
+      );
     }
 
     Object.assign(comment, updateCommentDto);
@@ -204,7 +225,9 @@ export class CommentsService {
     }
 
     if (comment.authorId !== userId) {
-      throw new ForbiddenException('No tienes permisos para eliminar este comentario');
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar este comentario',
+      );
     }
 
     // Decrementar contador de comentarios en el post
@@ -212,7 +235,11 @@ export class CommentsService {
 
     // Si es una respuesta, decrementar contador de respuestas en el comentario padre
     if (comment.parentId) {
-      await this.commentRepository.decrement({ id: comment.parentId }, 'repliesCount', 1);
+      await this.commentRepository.decrement(
+        { id: comment.parentId },
+        'repliesCount',
+        1,
+      );
     }
 
     await this.commentRepository.remove(comment);

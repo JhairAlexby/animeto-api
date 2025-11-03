@@ -34,7 +34,8 @@ export class ReactionsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Crear o actualizar reacción',
-    description: 'Crea una nueva reacción o actualiza una existente (like/dislike toggle)',
+    description:
+      'Crea una nueva reacción o actualiza una existente (like/dislike toggle)',
   })
   @ApiResponse({
     status: 201,
@@ -47,9 +48,20 @@ export class ReactionsController {
         data: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
-            type: { type: 'string', enum: ['like', 'dislike'], example: 'like' },
-            target: { type: 'string', enum: ['post', 'comment'], example: 'post' },
+            id: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
+            type: {
+              type: 'string',
+              enum: ['like', 'dislike'],
+              example: 'like',
+            },
+            target: {
+              type: 'string',
+              enum: ['post', 'comment'],
+              example: 'post',
+            },
             createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
             user: {
               type: 'object',
@@ -92,8 +104,8 @@ export class ReactionsController {
           type: 'array',
           items: {
             type: 'string',
-            example: 'El tipo de reacción es obligatorio'
-          }
+            example: 'El tipo de reacción es obligatorio',
+          },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
@@ -157,7 +169,10 @@ export class ReactionsController {
             likesCount: { type: 'number', example: 15 },
             dislikesCount: { type: 'number', example: 2 },
             totalReactions: { type: 'number', example: 17 },
-            postId: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            postId: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
           },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
@@ -196,7 +211,9 @@ export class ReactionsController {
     status: 200,
     description: 'Reacciones obtenidas exitosamente',
   })
-  async getCommentReactions(@Param('commentId', ParseUUIDPipe) commentId: string) {
+  async getCommentReactions(
+    @Param('commentId', ParseUUIDPipe) commentId: string,
+  ) {
     return this.reactionsService.getReactionsByComment(commentId);
   }
 
@@ -205,7 +222,8 @@ export class ReactionsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obtener reacciones de un post con reacción del usuario',
-    description: 'Obtiene el conteo de reacciones de un post incluyendo la reacción del usuario autenticado',
+    description:
+      'Obtiene el conteo de reacciones de un post incluyendo la reacción del usuario autenticado',
   })
   @ApiParam({
     name: 'postId',
@@ -229,7 +247,8 @@ export class ReactionsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obtener reacciones de un comentario con reacción del usuario',
-    description: 'Obtiene el conteo de reacciones de un comentario incluyendo la reacción del usuario autenticado',
+    description:
+      'Obtiene el conteo de reacciones de un comentario incluyendo la reacción del usuario autenticado',
   })
   @ApiParam({
     name: 'commentId',
@@ -245,7 +264,11 @@ export class ReactionsController {
     @Param('commentId', ParseUUIDPipe) commentId: string,
     @GetCurrentUser() user: User,
   ) {
-    return this.reactionsService.getReactionsWithUserReaction(user.id, undefined, commentId);
+    return this.reactionsService.getReactionsWithUserReaction(
+      user.id,
+      undefined,
+      commentId,
+    );
   }
 
   @Delete(':id')
@@ -273,7 +296,10 @@ export class ReactionsController {
         data: {
           type: 'object',
           properties: {
-            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            id: {
+              type: 'string',
+              example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+            },
             type: { type: 'string', example: 'like' },
             target: { type: 'string', example: 'post' },
             deletedAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
@@ -302,7 +328,10 @@ export class ReactionsController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: false },
-        message: { type: 'string', example: 'No tienes permisos para eliminar esta reacción' },
+        message: {
+          type: 'string',
+          example: 'No tienes permisos para eliminar esta reacción',
+        },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
     },

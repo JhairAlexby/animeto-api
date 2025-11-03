@@ -32,7 +32,8 @@ export class AuthController {
   @UseInterceptors(FileInterceptor('profilePhoto'))
   @ApiOperation({
     summary: 'Registrar nuevo usuario',
-    description: 'Registra un nuevo usuario en el sistema con foto de perfil opcional',
+    description:
+      'Registra un nuevo usuario en el sistema con foto de perfil opcional',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -82,7 +83,10 @@ export class AuthController {
                 id: { type: 'string', example: 'uuid' },
                 name: { type: 'string', example: 'Juan Pérez' },
                 email: { type: 'string', example: 'juan@example.com' },
-                createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+                createdAt: {
+                  type: 'string',
+                  example: '2024-01-01T00:00:00.000Z',
+                },
                 hasProfilePhoto: { type: 'boolean', example: true },
               },
             },
@@ -105,8 +109,9 @@ export class AuthController {
           type: 'array',
           items: {
             type: 'string',
-            example: 'La contraseña debe contener al menos una letra minúscula, una mayúscula y un número'
-          }
+            example:
+              'La contraseña debe contener al menos una letra minúscula, una mayúscula y un número',
+          },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
@@ -119,7 +124,10 @@ export class AuthController {
       type: 'object',
       properties: {
         success: { type: 'boolean', example: false },
-        message: { type: 'string', example: 'El correo electrónico ya está registrado' },
+        message: {
+          type: 'string',
+          example: 'El correo electrónico ya está registrado',
+        },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },
     },
@@ -159,7 +167,10 @@ export class AuthController {
                 id: { type: 'string', example: 'uuid' },
                 name: { type: 'string', example: 'Juan Pérez' },
                 email: { type: 'string', example: 'juan@example.com' },
-                createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+                createdAt: {
+                  type: 'string',
+                  example: '2024-01-01T00:00:00.000Z',
+                },
                 hasProfilePhoto: { type: 'boolean', example: true },
               },
             },
@@ -194,8 +205,8 @@ export class AuthController {
           type: 'array',
           items: {
             type: 'string',
-            example: 'El correo electrónico es obligatorio'
-          }
+            example: 'El correo electrónico es obligatorio',
+          },
         },
         timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
       },

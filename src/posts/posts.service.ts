@@ -35,8 +35,17 @@ export class PostsService {
   }
 
   async findAll(filterDto: FilterPostsDto): Promise<PaginatedResponse<Post>> {
-    const { page = 1, limit = 10, type, tags, search, authorId, sortBy = 'createdAt', sortOrder = 'DESC' } = filterDto;
-    
+    const {
+      page = 1,
+      limit = 10,
+      type,
+      tags,
+      search,
+      authorId,
+      sortBy = 'createdAt',
+      sortOrder = 'DESC',
+    } = filterDto;
+
     const queryBuilder = this.postRepository
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
@@ -68,7 +77,7 @@ export class PostsService {
     const totalPages = Math.ceil(total / limit);
 
     return {
-      data: posts.map(post => ({
+      data: posts.map((post) => ({
         ...post,
         hasImage: !!post.imageMimeType,
         imageMimeType: undefined,
@@ -116,7 +125,11 @@ export class PostsService {
     } as any;
   }
 
-  async update(id: string, updatePostDto: UpdatePostDto, userId: string): Promise<Post> {
+  async update(
+    id: string,
+    updatePostDto: UpdatePostDto,
+    userId: string,
+  ): Promise<Post> {
     const post = await this.postRepository.findOne({
       where: { id },
       relations: ['author'],
@@ -134,7 +147,11 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async updateImage(id: string, userId: string, image: Express.Multer.File): Promise<Post> {
+  async updateImage(
+    id: string,
+    userId: string,
+    image: Express.Multer.File,
+  ): Promise<Post> {
     const post = await this.postRepository.findOne({
       where: { id },
     });
@@ -153,7 +170,9 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async getImage(id: string): Promise<{ image: Buffer; mimeType: string | null }> {
+  async getImage(
+    id: string,
+  ): Promise<{ image: Buffer; mimeType: string | null }> {
     const post = await this.postRepository.findOne({
       where: { id },
       select: ['image', 'imageMimeType'],
@@ -198,7 +217,9 @@ export class PostsService {
     }
 
     if (post.authorId !== userId) {
-      throw new ForbiddenException('No tienes permisos para eliminar este post');
+      throw new ForbiddenException(
+        'No tienes permisos para eliminar este post',
+      );
     }
 
     await this.postRepository.remove(post);
@@ -230,7 +251,12 @@ export class PostsService {
 
   private applyFilters(
     queryBuilder: SelectQueryBuilder<Post>,
-    filters: { type?: string; tags?: string[]; search?: string; authorId?: string },
+    filters: {
+      type?: string;
+      tags?: string[];
+      search?: string;
+      authorId?: string;
+    },
   ): void {
     const { type, tags, search, authorId } = filters;
 
@@ -253,7 +279,10 @@ export class PostsService {
     }
   }
 
-  async getPostsByUser(userId: string, filterDto: FilterPostsDto): Promise<PaginatedResponse<Post>> {
+  async getPostsByUser(
+    userId: string,
+    filterDto: FilterPostsDto,
+  ): Promise<PaginatedResponse<Post>> {
     return this.findAll({ ...filterDto, authorId: userId });
   }
 }

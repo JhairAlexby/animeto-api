@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
-import { Reaction, ReactionType, ReactionTarget } from './entities/reaction.entity';
+import {
+  Reaction,
+  ReactionType,
+  ReactionTarget,
+} from './entities/reaction.entity';
 import { CreateReactionDto } from './dto/create-reaction.dto';
 import { PostsService } from '../posts/posts.service';
 import { CommentsService } from '../comments/comments.service';
@@ -20,16 +24,23 @@ export class ReactionsService {
     private commentsService: CommentsService,
   ) {}
 
-  async create(createReactionDto: CreateReactionDto, userId: string): Promise<Reaction> {
+  async create(
+    createReactionDto: CreateReactionDto,
+    userId: string,
+  ): Promise<Reaction> {
     const { type, target, postId, commentId } = createReactionDto;
 
     // Validar que se proporcione el ID correcto según el target
     if (target === ReactionTarget.POST && !postId) {
-      throw new BadRequestException('Se requiere postId para reacciones a posts');
+      throw new BadRequestException(
+        'Se requiere postId para reacciones a posts',
+      );
     }
 
     if (target === ReactionTarget.COMMENT && !commentId) {
-      throw new BadRequestException('Se requiere commentId para reacciones a comentarios');
+      throw new BadRequestException(
+        'Se requiere commentId para reacciones a comentarios',
+      );
     }
 
     // Verificar que el post o comentario existe
@@ -63,18 +74,29 @@ export class ReactionsService {
     reaction.type = type;
     reaction.target = target;
     reaction.userId = userId;
-    reaction.postId = target === ReactionTarget.POST ? (postId || null) : null;
-     reaction.commentId = target === ReactionTarget.COMMENT ? (commentId || null) : null;
+    reaction.postId = target === ReactionTarget.POST ? postId || null : null;
+    reaction.commentId =
+      target === ReactionTarget.COMMENT ? commentId || null : null;
 
     const savedReaction = await this.reactionRepository.save(reaction);
 
     // Actualizar contadores
-    await this.updateCounters(target, postId || null, commentId || null, type, 'increment');
+    await this.updateCounters(
+      target,
+      postId || null,
+      commentId || null,
+      type,
+      'increment',
+    );
 
     return savedReaction;
   }
 
-  async update(id: string, newType: ReactionType, userId: string): Promise<Reaction> {
+  async update(
+    id: string,
+    newType: ReactionType,
+    userId: string,
+  ): Promise<Reaction> {
     const reaction = await this.reactionRepository.findOne({
       where: { id, userId },
     });
@@ -86,14 +108,26 @@ export class ReactionsService {
     const oldType = reaction.type;
 
     // Decrementar contador anterior
-    await this.updateCounters(reaction.target, reaction.postId, reaction.commentId, oldType, 'decrement');
+    await this.updateCounters(
+      reaction.target,
+      reaction.postId,
+      reaction.commentId,
+      oldType,
+      'decrement',
+    );
 
     // Actualizar tipo de reacción
     reaction.type = newType;
     const updatedReaction = await this.reactionRepository.save(reaction);
 
     // Incrementar nuevo contador
-    await this.updateCounters(reaction.target, reaction.postId, reaction.commentId, newType, 'increment');
+    await this.updateCounters(
+      reaction.target,
+      reaction.postId,
+      reaction.commentId,
+      newType,
+      'increment',
+    );
 
     return updatedReaction;
   }
@@ -108,13 +142,23 @@ export class ReactionsService {
     }
 
     // Decrementar contador
-    await this.updateCounters(reaction.target, reaction.postId, reaction.commentId, reaction.type, 'decrement');
+    await this.updateCounters(
+      reaction.target,
+      reaction.postId,
+      reaction.commentId,
+      reaction.type,
+      'decrement',
+    );
 
     await this.reactionRepository.remove(reaction);
     return reaction;
   }
 
-  async getUserReaction(userId: string, postId?: string, commentId?: string): Promise<Reaction | null> {
+  async getUserReaction(
+    userId: string,
+    postId?: string,
+    commentId?: string,
+  ): Promise<Reaction | null> {
     return this.reactionRepository.findOne({
       where: {
         userId,
@@ -124,18 +168,22 @@ export class ReactionsService {
     });
   }
 
-  async getReactionsByPost(postId: string): Promise<{ likes: number; dislikes: number; userReaction?: ReactionType }> {
+  async getReactionsByPost(
+    postId: string,
+  ): Promise<{ likes: number; dislikes: number; userReaction?: ReactionType }> {
     const post = await this.postsService.findOne(postId);
-    
+
     return {
       likes: post.likesCount,
       dislikes: post.dislikesCount,
     };
   }
 
-  async getReactionsByComment(commentId: string): Promise<{ likes: number; dislikes: number; userReaction?: ReactionType }> {
+  async getReactionsByComment(
+    commentId: string,
+  ): Promise<{ likes: number; dislikes: number; userReaction?: ReactionType }> {
     const comment = await this.commentsService.findOne(commentId);
-    
+
     return {
       likes: comment.likesCount,
       dislikes: comment.dislikesCount,

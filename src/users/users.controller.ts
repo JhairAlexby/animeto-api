@@ -21,6 +21,7 @@ import {
   ApiConsumes,
   ApiBearerAuth,
   ApiParam,
+  ApiBody,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -43,6 +44,36 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'Perfil del usuario obtenido exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Operación exitosa' },
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            name: { type: 'string', example: 'Juan Pérez' },
+            email: { type: 'string', example: 'juan@example.com' },
+            createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+            hasProfilePhoto: { type: 'boolean', example: true },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de acceso inválido o expirado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Token de acceso inválido' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async getProfile(@GetCurrentUser() user: User) {
     return this.usersService.getUserProfile(user.id);
@@ -56,6 +87,55 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'Perfil actualizado exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Perfil actualizado exitosamente' },
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            name: { type: 'string', example: 'Juan Carlos Pérez' },
+            email: { type: 'string', example: 'juan@example.com' },
+            createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+            hasProfilePhoto: { type: 'boolean', example: true },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos de entrada inválidos',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Datos de entrada inválidos' },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+            example: 'El nombre debe tener al menos 2 caracteres'
+          }
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de acceso inválido o expirado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Token de acceso inválido' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async updateProfile(
     @GetCurrentUser() user: User,
@@ -72,9 +152,55 @@ export class UsersController {
     description: 'Sube o actualiza la foto de perfil del usuario autenticado',
   })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Archivo de imagen para la foto de perfil',
+    schema: {
+      type: 'object',
+      properties: {
+        photo: {
+          type: 'string',
+          format: 'binary',
+          description: 'Archivo de imagen (JPG, PNG, GIF - máximo 5MB)',
+        },
+      },
+      required: ['photo'],
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'Foto de perfil subida exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Foto de perfil actualizada exitosamente' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Archivo inválido o no proporcionado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'El archivo debe ser una imagen válida (JPG, PNG, GIF)' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de acceso inválido o expirado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Token de acceso inválido' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async uploadProfilePhoto(
     @GetCurrentUser() user: User,

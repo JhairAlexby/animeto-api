@@ -23,6 +23,7 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiQuery,
+  ApiBody,
 } from '@nestjs/swagger';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -47,9 +48,107 @@ export class PostsController {
     description: 'Crea un nuevo post con imagen opcional',
   })
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Datos del post con imagen opcional',
+    schema: {
+      type: 'object',
+      properties: {
+        description: {
+          type: 'string',
+          description: 'Descripción del post',
+          example: 'Mi manga favorito de la temporada',
+        },
+        currentChapters: {
+          type: 'number',
+          description: 'Número de capítulos actuales',
+          example: 25,
+        },
+        type: {
+          type: 'string',
+          enum: ['anime', 'manga', 'manhwa'],
+          description: 'Tipo de contenido',
+          example: 'manga',
+        },
+        tags: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Etiquetas del post',
+          example: ['acción', 'aventura', 'shonen'],
+        },
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Imagen del post (opcional)',
+        },
+      },
+      required: ['description', 'type'],
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'Post creado exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Post creado exitosamente' },
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            description: { type: 'string', example: 'Mi manga favorito de la temporada' },
+            currentChapters: { type: 'number', example: 25 },
+            type: { type: 'string', example: 'manga' },
+            tags: { type: 'array', items: { type: 'string' }, example: ['acción', 'aventura', 'shonen'] },
+            likesCount: { type: 'number', example: 0 },
+            dislikesCount: { type: 'number', example: 0 },
+            commentsCount: { type: 'number', example: 0 },
+            hasImage: { type: 'boolean', example: true },
+            createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+            author: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', example: 'author-uuid' },
+                name: { type: 'string', example: 'Juan Pérez' },
+                hasProfilePhoto: { type: 'boolean', example: true },
+              },
+            },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos de entrada inválidos',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Datos de entrada inválidos' },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+            example: 'La descripción es obligatoria'
+          }
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de acceso inválido o expirado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Token de acceso inválido' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async create(
     @Body() createPostDto: CreatePostDto,
@@ -68,6 +167,54 @@ export class PostsController {
   @ApiResponse({
     status: 200,
     description: 'Lista de posts obtenida exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Operación exitosa' },
+        data: {
+          type: 'object',
+          properties: {
+            posts: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+                  description: { type: 'string', example: 'Mi manga favorito de la temporada' },
+                  currentChapters: { type: 'number', example: 25 },
+                  type: { type: 'string', example: 'manga' },
+                  tags: { type: 'array', items: { type: 'string' }, example: ['acción', 'aventura', 'shonen'] },
+                  likesCount: { type: 'number', example: 15 },
+                  dislikesCount: { type: 'number', example: 2 },
+                  commentsCount: { type: 'number', example: 8 },
+                  hasImage: { type: 'boolean', example: true },
+                  createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+                  author: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', example: 'author-uuid' },
+                      name: { type: 'string', example: 'Juan Pérez' },
+                      hasProfilePhoto: { type: 'boolean', example: true },
+                    },
+                  },
+                },
+              },
+            },
+            pagination: {
+              type: 'object',
+              properties: {
+                page: { type: 'number', example: 1 },
+                limit: { type: 'number', example: 10 },
+                total: { type: 'number', example: 50 },
+                totalPages: { type: 'number', example: 5 },
+              },
+            },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async findAll(@Query() filterDto: FilterPostsDto) {
     return this.postsService.findAll(filterDto);

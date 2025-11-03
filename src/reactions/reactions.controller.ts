@@ -39,6 +39,89 @@ export class ReactionsController {
   @ApiResponse({
     status: 201,
     description: 'Reacción creada/actualizada exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Reacción creada exitosamente' },
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            type: { type: 'string', enum: ['like', 'dislike'], example: 'like' },
+            target: { type: 'string', enum: ['post', 'comment'], example: 'post' },
+            createdAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+            user: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', example: 'user-uuid' },
+                name: { type: 'string', example: 'Juan Pérez' },
+              },
+            },
+            post: {
+              type: 'object',
+              nullable: true,
+              properties: {
+                id: { type: 'string', example: 'post-uuid' },
+                description: { type: 'string', example: 'Mi manga favorito' },
+              },
+            },
+            comment: {
+              type: 'object',
+              nullable: true,
+              properties: {
+                id: { type: 'string', example: 'comment-uuid' },
+                content: { type: 'string', example: 'Excelente manga' },
+              },
+            },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos de entrada inválidos',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Datos de entrada inválidos' },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+            example: 'El tipo de reacción es obligatorio'
+          }
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de acceso inválido o expirado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Token de acceso inválido' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Post o comentario no encontrado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Post no encontrado' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async create(
     @Body() createReactionDto: CreateReactionDto,
@@ -58,10 +141,40 @@ export class ReactionsController {
     description: 'ID del post',
     type: 'string',
     format: 'uuid',
+    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
   })
   @ApiResponse({
     status: 200,
     description: 'Reacciones obtenidas exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Operación exitosa' },
+        data: {
+          type: 'object',
+          properties: {
+            likesCount: { type: 'number', example: 15 },
+            dislikesCount: { type: 'number', example: 2 },
+            totalReactions: { type: 'number', example: 17 },
+            postId: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Post no encontrado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Post no encontrado' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async getPostReactions(@Param('postId', ParseUUIDPipe) postId: string) {
     return this.reactionsService.getReactionsByPost(postId);
@@ -147,10 +260,64 @@ export class ReactionsController {
     description: 'ID de la reacción',
     type: 'string',
     format: 'uuid',
+    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
   })
   @ApiResponse({
     status: 200,
     description: 'Reacción eliminada exitosamente',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Reacción eliminada exitosamente' },
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479' },
+            type: { type: 'string', example: 'like' },
+            target: { type: 'string', example: 'post' },
+            deletedAt: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+          },
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de acceso inválido o expirado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Token de acceso inválido' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'No autorizado para eliminar esta reacción',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'No tienes permisos para eliminar esta reacción' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Reacción no encontrada',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Reacción no encontrada' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async remove(
     @Param('id', ParseUUIDPipe) id: string,

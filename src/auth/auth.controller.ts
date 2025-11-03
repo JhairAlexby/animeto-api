@@ -96,10 +96,33 @@ export class AuthController {
   @ApiResponse({
     status: 400,
     description: 'Datos de entrada inválidos',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Datos de entrada inválidos' },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+            example: 'La contraseña debe contener al menos una letra minúscula, una mayúscula y un número'
+          }
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   @ApiResponse({
     status: 409,
     description: 'El correo electrónico ya está registrado',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'El correo electrónico ya está registrado' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async register(
     @Body() registerDto: RegisterDto,
@@ -150,6 +173,33 @@ export class AuthController {
   @ApiResponse({
     status: 401,
     description: 'Credenciales inválidas',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Credenciales inválidas' },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Datos de entrada inválidos',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: false },
+        message: { type: 'string', example: 'Datos de entrada inválidos' },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+            example: 'El correo electrónico es obligatorio'
+          }
+        },
+        timestamp: { type: 'string', example: '2024-01-01T00:00:00.000Z' },
+      },
+    },
   })
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);

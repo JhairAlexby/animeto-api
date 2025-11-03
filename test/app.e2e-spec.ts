@@ -302,4 +302,25 @@ describe('Animeto API (e2e)', () => {
         });
     });
   });
+
+  describe('Publicaciones', () => {
+    it('/api/publicaciones/completas (GET) - should get aggregated posts with reactions and comments', () => {
+      return request(app.getHttpServer())
+        .get('/api/publicaciones/completas?page=1&limit=10')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.success).toBe(true);
+          expect(res.body.data.publicaciones).toBeInstanceOf(Array);
+          expect(res.body.data.pagination).toBeDefined();
+          if (res.body.data.publicaciones.length > 0) {
+            const pub = res.body.data.publicaciones[0];
+            expect(pub).toHaveProperty('id');
+            expect(pub).toHaveProperty('description');
+            expect(pub).toHaveProperty('author');
+            expect(pub).toHaveProperty('reactions');
+            expect(pub).toHaveProperty('comments');
+          }
+        });
+    });
+  });
 });

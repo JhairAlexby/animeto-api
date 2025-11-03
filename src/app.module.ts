@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { ReactionsModule } from './reactions/reactions.module';
+import { PublicacionesModule } from './publicaciones/publicaciones.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -40,6 +41,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     PostsModule,
     CommentsModule,
     ReactionsModule,
+    PublicacionesModule,
   ],
   controllers: [AppController],
   providers: [

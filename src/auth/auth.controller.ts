@@ -23,7 +23,7 @@ import { Public } from './decorators/public.decorator';
 import { ValidateImageFile } from '../common/decorators/file-validation.decorator';
 
 @ApiTags('Autenticación')
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

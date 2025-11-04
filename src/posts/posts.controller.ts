@@ -38,7 +38,7 @@ import { User } from '../users/entities/user.entity';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Posts')
-@Controller('posts')
+@Controller('api/posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 

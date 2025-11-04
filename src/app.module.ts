@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
@@ -14,9 +14,12 @@ import { PublicacionesModule } from './publicaciones/publicaciones.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { ApiPrefixModule } from './common/middleware';
+import { ApiPrefixMiddleware } from './common/middleware/api-prefix.middleware';
 
 @Module({
   imports: [
+    ApiPrefixModule,
     ConfigModule,
     DatabaseModule,
     ThrottlerModule.forRoot([
@@ -64,4 +67,10 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ApiPrefixMiddleware)
+      .forRoutes('*');
+  }
+}

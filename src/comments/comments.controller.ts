@@ -27,7 +27,7 @@ import { User } from '../users/entities/user.entity';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Comentarios')
-@Controller('comments')
+@Controller('api/comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 

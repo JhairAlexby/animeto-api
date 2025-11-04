@@ -25,7 +25,7 @@ import { User } from '../users/entities/user.entity';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Reacciones')
-@Controller('reactions')
+@Controller('api/reactions')
 export class ReactionsController {
   constructor(private readonly reactionsService: ReactionsService) {}
 
